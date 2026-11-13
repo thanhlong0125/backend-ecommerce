@@ -1,0 +1,13 @@
+app:
+  name: ${APP_NAME}
+  prefix: ${APP_PREFIX}
+  port: ${GATEWAY_PORT}
+
+service:
+  name: ${APP_NAME}-gateway
+  advertiseHost: ${SERVICE_ADVERTISE_HOST}
+
+consul:
+  url: ${CONSUL_URL}
+
+serviceHostOverride: ${SERVICE_HOST_OVERRIDE}

@@ -1,0 +1,17 @@
+app:
+  name: ${APP_NAME}
+  prefix: ${APP_PREFIX}
+  port: ${AUTH_PORT}
+
+service:
+  name: ${APP_NAME}-auth
+  advertiseHost: ${SERVICE_ADVERTISE_HOST}
+
+consul:
+  url: ${CONSUL_URL}
+
+auth:
+  jwtSecret: ${AUTH_JWT_SECRET}
+
+database:
+  url: ${MONGODB_URL}

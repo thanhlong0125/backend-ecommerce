@@ -1,0 +1,67 @@
+services:
+  consul:
+    image: hashicorp/consul:1.20
+    command: agent -dev -client=0.0.0.0
+    ports:
+      - "8500:8500"
+
+  mongo:
+    image: mongo:7
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mongosh --quiet --eval \"try { rs.status().ok } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'localhost:27017'}]}).ok }\" | grep -q 1",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  directus-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${DIRECTUS_DB_NAME:-directus}
+      POSTGRES_USER: ${DIRECTUS_DB_USER:-directus}
+      POSTGRES_PASSWORD: ${DIRECTUS_DB_PASSWORD:-local-dev-only}
+    ports:
+      - "5432:5432"
+    volumes:
+      - directus-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${DIRECTUS_DB_USER:-directus} -d ${DIRECTUS_DB_NAME:-directus}",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  directus:
+    image: directus/directus:11
+    depends_on:
+      directus-db:
+        condition: service_healthy
+    environment:
+      KEY: ${DIRECTUS_KEY:-local-development-key}
+      SECRET: ${DIRECTUS_SECRET:-local-development-secret}
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL:-admin@example.com}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD:-local-dev-only}
+      DB_CLIENT: pg
+      DB_HOST: directus-db
+      DB_PORT: 5432
+      DB_DATABASE: ${DIRECTUS_DB_NAME:-directus}
+      DB_USER: ${DIRECTUS_DB_USER:-directus}
+      DB_PASSWORD: ${DIRECTUS_DB_PASSWORD:-local-dev-only}
+      WEBSOCKETS_ENABLED: "false"
+    ports:
+      - "8055:8055"
+
+volumes:
+  mongo-data:
+  directus-postgres-data:

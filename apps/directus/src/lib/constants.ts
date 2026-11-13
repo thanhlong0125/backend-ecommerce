@@ -1,0 +1,1 @@
+export const DIRECTUS_CONFIG = 'DIRECTUS_CONFIG';

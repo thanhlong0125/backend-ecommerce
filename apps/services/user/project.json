@@ -1,0 +1,53 @@
+{
+  "name": "user",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/services/user/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/services/user",
+        "main": "apps/services/user/src/main.ts",
+        "tsConfig": "apps/services/user/tsconfig.app.json",
+        "assets": ["apps/services/user/src/bootstraps"],
+        "webpackConfig": "apps/services/user/webpack.config.js",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "optimization": true
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "user:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "user:build:development",
+          "runtimeArgs": ["--env-file=.env.local"]
+        },
+        "production": {
+          "buildTarget": "user:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/services/user/jest.config.ts"
+      }
+    }
+  }
+}
