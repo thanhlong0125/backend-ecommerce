@@ -37,8 +37,13 @@ Requirements: Node.js 22+, pnpm 10+, and Docker Compose.
 
    ```sh
    pnpm run prisma:push
+   pnpm run prisma:seed
    pnpm run start:local
    ```
+
+   The catalog seed is safe to rerun: it adds four clothing-length categories
+   and 20 tole products without overwriting existing catalog records. Seed
+   prices are sample values in VND.
 
 Gateway listens on `GATEWAY_PORT`; Auth listens on `AUTH_PORT`. Each service
 loads its own YAML bootstrap from
@@ -65,13 +70,12 @@ Content-Type: application/json
 
 Then login with `POST /api/auth/login` using `email` and `password`. Both
 endpoints return an app JWT. The User service validates that JWT and stores
-bcrypt password hashes in MongoDB. Existing `UserProfile` records from the
-earlier Directus flow are retained but are not automatically converted to
-login accounts.
+bcrypt password hashes in MongoDB. Legacy Directus profile records are not
+automatically migrated to login accounts.
 
 For local development, set `SEED_USER_EMAIL`, `SEED_USER_PASSWORD`, and
 optionally `SEED_USER_DISPLAY_NAME` in `.env.local`. When the Auth service
-starts, it creates that user only if the `User` collection is empty. The
+starts, it creates that user only if the `users` collection is empty. The
 password is hashed with bcrypt; the seed is disabled outside development and
 does not overwrite existing users.
 
@@ -130,7 +134,12 @@ stop the service process before removing it.
 - Shared Prisma client lifecycle: `apps/shared/prisma.service.ts`
 - Shared JWT guard: `apps/shared/jwt-auth.guard.ts` (validates app-issued JWTs)
 - Shared Directus REST client: `apps/directus/src/`
-- MongoDB profile schema: `prisma/schema.prisma`
+- Shared Prisma schema: `db/prisma/schema.prisma`
+- MongoDB models: `User` (`users`), `Category` (`categories`), and `Product`
+  (`products`); each product belongs to one category and `price` is an integer
+  amount in VND.
+- Auth request validation: `db/authschema/`
+- User request validation: `db/userschema/`
 - Directus runs on PostgreSQL; do not point Directus at MongoDB.
 
 Never commit `.env.local`, real Directus credentials, or production secrets.

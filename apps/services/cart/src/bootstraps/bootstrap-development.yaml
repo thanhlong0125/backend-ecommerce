@@ -1,0 +1,11 @@
+app:
+  name: ${APP_NAME}
+  prefix: ${APP_PREFIX}
+  port: ${CART_PORT}
+
+service:
+  name: ${APP_NAME}-cart
+  advertiseHost: ${SERVICE_ADVERTISE_HOST}
+
+consul:
+  url: ${CONSUL_URL}

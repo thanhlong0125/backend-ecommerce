@@ -8,8 +8,8 @@ import * as bcrypt from 'bcryptjs';
 import { AuthenticatedUser } from '../../../../shared/jwt-auth.guard';
 import { JwtTokenService } from '../../../../shared/jwt-token.service';
 import { PrismaService } from '../../../../shared/prisma.service';
-import { ChangePasswordRequest } from './change-password.schema';
-import { UpdateUserRequest } from './update-user.schema';
+import { ChangePasswordRequest } from '../../../../../db/userschema/change-password.schema';
+import { UpdateUserRequest } from '../../../../../db/userschema/update-user.schema';
 
 @Injectable()
 export class UserService {

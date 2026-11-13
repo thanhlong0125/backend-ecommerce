@@ -1,0 +1,54 @@
+{
+  "name": "product",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/services/product/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/services/product",
+        "main": "apps/services/product/src/main.ts",
+        "tsConfig": "apps/services/product/tsconfig.app.json",
+        "assets": [
+          "apps/services/product/src/bootstraps"
+        ],
+        "webpackConfig": "apps/services/product/webpack.config.js",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "optimization": true
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "buildTarget": "product:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "product:build:development",
+          "runtimeArgs": [
+            "--env-file=.env.local"
+          ]
+        },
+        "production": {
+          "buildTarget": "product:build:production"
+        }
+      }
+    }
+  }
+}

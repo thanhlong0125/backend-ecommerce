@@ -8,8 +8,8 @@ import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import { JwtTokenService } from '../../../../../shared/jwt-token.service';
 import { PrismaService } from '../../../../../shared/prisma.service';
-import { LoginSchema } from './login.schema';
-import { RegisterSchema } from './register.schema';
+import { LoginSchema } from '../../../../../../db/authschema/login.schema';
+import { RegisterSchema } from '../../../../../../db/authschema/register.schema';
 
 @Injectable()
 export class AuthService {

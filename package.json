@@ -8,11 +8,12 @@
   },
   "scripts": {
     "service": "node tools/service-cli.mjs",
-    "start:local": "pnpm exec nx run-many --target=serve --projects=gateway,auth,user --parallel=3",
-    "build": "pnpm exec nx run-many --target=build --projects=gateway,auth,directus-client,user --parallel=4",
-    "typecheck": "tsc --noEmit -p apps/gateway/tsconfig.app.json && tsc --noEmit -p apps/services/auth/tsconfig.app.json && tsc --noEmit -p apps/directus/tsconfig.lib.json && pnpm exec tsc --noEmit -p apps/services/user/tsconfig.app.json",
-    "prisma:generate": "prisma generate --schema prisma/schema.prisma",
-    "prisma:push": "prisma db push --schema prisma/schema.prisma"
+    "start:local": "pnpm exec nx run-many --target=serve --projects=gateway,auth,user,product,cart --parallel=5",
+    "build": "pnpm exec nx run-many --target=build --projects=gateway,auth,directus-client,user,product,cart --parallel=6",
+    "typecheck": "tsc --noEmit -p apps/gateway/tsconfig.app.json && tsc --noEmit -p apps/services/auth/tsconfig.app.json && tsc --noEmit -p apps/directus/tsconfig.lib.json && pnpm exec tsc --noEmit -p apps/services/user/tsconfig.app.json && pnpm exec tsc --noEmit -p apps/services/product/tsconfig.app.json && pnpm exec tsc --noEmit -p apps/services/cart/tsconfig.app.json",
+    "prisma:generate": "prisma generate --schema db/prisma/schema.prisma",
+    "prisma:push": "prisma db push --schema db/prisma/schema.prisma",
+    "prisma:seed": "node --env-file=.env.local db/prisma/seed.mjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.19",

@@ -109,6 +109,7 @@ function serviceFiles(slug, portName) {
     .split('-')
     .map((part) => part[0].toUpperCase() + part.slice(1))
     .join('');
+  const servicePropertyName = appName[0].toLowerCase() + appName.slice(1);
   const project = {
     name: slug,
     $schema: '../../../node_modules/nx/schemas/project-schema.json',
@@ -235,16 +236,18 @@ void bootstrap().catch((error: unknown) => {
 import { APP_BOOTSTRAP, AppBootstrap } from '../../../../shared/bootstrap';
 import { ServiceRegistry } from '../../../../shared/service-registry';
 import { HealthController } from './health.controller';
-import { ServiceController } from './service.controller';
+import { ${appName}Controller } from './${slug}.controller';
+import { ${appName}Service } from './${slug}.service';
 
 @Module({})
 export class AppModule {
   static register(config: AppBootstrap): DynamicModule {
     return {
       module: AppModule,
-      controllers: [HealthController, ServiceController],
+      controllers: [HealthController, ${appName}Controller],
       providers: [
         { provide: APP_BOOTSTRAP, useValue: config },
+        ${appName}Service,
         ServiceRegistry,
       ],
     };
@@ -266,12 +269,27 @@ export class HealthController {
 `,
     ],
     [
-      'src/app/service.controller.ts',
+      `src/app/${slug}.controller.ts`,
       `import { Controller, Get } from '@nestjs/common';
+import { ${appName}Service } from './${slug}.service';
 
 @Controller('${slug}')
-export class ServiceController {
+export class ${appName}Controller {
+  constructor(private readonly ${servicePropertyName}Service: ${appName}Service) {}
+
   @Get()
+  getStatus() {
+    return this.${servicePropertyName}Service.getStatus();
+  }
+}
+`,
+    ],
+    [
+      `src/app/${slug}.service.ts`,
+      `import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class ${appName}Service {
   getStatus() {
     return { service: '${slug}', status: 'ok' };
   }

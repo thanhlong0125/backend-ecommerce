@@ -14,8 +14,8 @@ import {
   JwtAuthGuard,
 } from '../../../../shared/jwt-auth.guard';
 import { UserService } from './user.service';
-import { ChangePasswordSchema } from './change-password.schema';
-import { UpdateUserSchema } from './update-user.schema';
+import { ChangePasswordSchema } from '../../../../../db/userschema/change-password.schema';
+import { UpdateUserSchema } from '../../../../../db/userschema/update-user.schema';
 
 @Controller('user')
 @UseGuards(JwtAuthGuard)

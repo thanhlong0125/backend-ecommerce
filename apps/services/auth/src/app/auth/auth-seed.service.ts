@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../../../../../shared/prisma.service';
-import { RegisterSchema } from './register.schema';
+import { RegisterSchema } from '../../../../../../db/authschema/register.schema';
 
 @Injectable()
 export class AuthSeedService implements OnApplicationBootstrap {

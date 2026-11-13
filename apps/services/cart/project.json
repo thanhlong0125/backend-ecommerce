@@ -1,0 +1,54 @@
+{
+  "name": "cart",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/services/cart/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/services/cart",
+        "main": "apps/services/cart/src/main.ts",
+        "tsConfig": "apps/services/cart/tsconfig.app.json",
+        "assets": [
+          "apps/services/cart/src/bootstraps"
+        ],
+        "webpackConfig": "apps/services/cart/webpack.config.js",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "optimization": true
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "buildTarget": "cart:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "cart:build:development",
+          "runtimeArgs": [
+            "--env-file=.env.local"
+          ]
+        },
+        "production": {
+          "buildTarget": "cart:build:production"
+        }
+      }
+    }
+  }
+}
