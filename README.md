@@ -41,9 +41,10 @@ Requirements: Node.js 22+, pnpm 10+, and Docker Compose.
    pnpm run start:local
    ```
 
-   The catalog seed is safe to rerun: it adds four clothing-length categories
-   and 20 tole products without overwriting existing catalog records. Seed
-   prices are sample values in VND.
+   The catalog seed is safe to rerun without duplicating records: it creates
+   four categories, seven measurement-based sizes (S-4XL), and 20 tole products
+   with per-size stock. Sample prices are 180,000 VND with an original price of
+   250,000 VND.
 
 Gateway listens on `GATEWAY_PORT`; Auth listens on `AUTH_PORT`. Each service
 loads its own YAML bootstrap from
@@ -135,9 +136,11 @@ stop the service process before removing it.
 - Shared JWT guard: `apps/shared/jwt-auth.guard.ts` (validates app-issued JWTs)
 - Shared Directus REST client: `apps/directus/src/`
 - Shared Prisma schema: `db/prisma/schema.prisma`
-- MongoDB models: `User` (`users`), `Category` (`categories`), and `Product`
-  (`products`); each product belongs to one category and `price` is an integer
-  amount in VND.
+- MongoDB models: `User` (`users`), `Category` (`categories`), `Size` (`sizes`),
+  `Product` (`products`), and `ProductSize` (`product_sizes`). Products store
+  their integer VND price, images, rating/review summaries, sold count, and
+  colors; each product belongs to one category. `ProductSize` links a product
+  to a size and tracks its stock.
 - Auth request validation: `db/authschema/`
 - User request validation: `db/userschema/`
 - Directus runs on PostgreSQL; do not point Directus at MongoDB.
