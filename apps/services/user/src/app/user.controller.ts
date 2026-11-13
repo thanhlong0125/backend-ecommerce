@@ -22,7 +22,7 @@ import { UpdateUserSchema } from './update-user.schema';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
+  @Get('/me')
   getUser(@Req() request: AuthenticatedRequest) {
     if (!request.user) {
       throw new UnauthorizedException('Authenticated user is required');

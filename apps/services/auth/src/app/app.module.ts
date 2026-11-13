@@ -7,6 +7,7 @@ import { JwtTokenService } from '../../../../shared/jwt-token.service';
 import { PrismaService } from '../../../../shared/prisma.service';
 import { ServiceRegistry } from '../../../../shared/service-registry';
 import { AuthController } from './auth/auth.controller';
+import { AuthSeedService } from './auth/auth-seed.service';
 import { AuthService } from './auth/auth.service';
 import { HealthController } from './health.controller';
 
@@ -25,6 +26,7 @@ export class AppModule {
         ServiceRegistry,
         PrismaService,
         JwtTokenService,
+        AuthSeedService,
         AuthService,
       ],
     };

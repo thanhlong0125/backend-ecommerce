@@ -3,7 +3,7 @@ services:
     image: hashicorp/consul:1.20
     command: agent -dev -client=0.0.0.0
     ports:
-      - "8500:8500"
+      - "8501:8500"
 
   mongo:
     image: mongo:7

@@ -69,6 +69,12 @@ bcrypt password hashes in MongoDB. Existing `UserProfile` records from the
 earlier Directus flow are retained but are not automatically converted to
 login accounts.
 
+For local development, set `SEED_USER_EMAIL`, `SEED_USER_PASSWORD`, and
+optionally `SEED_USER_DISPLAY_NAME` in `.env.local`. When the Auth service
+starts, it creates that user only if the `User` collection is empty. The
+password is hashed with bcrypt; the seed is disabled outside development and
+does not overwrite existing users.
+
 Change a password with `POST /api/user/change-password`, sending
 `currentPassword` and `newPassword` (8 or more characters) with the JWT in the
 Authorization header. `AUTH_JWT_SECRET` must be at least 32 characters and
@@ -82,15 +88,16 @@ leading `+`, spaces, parentheses, periods, and hyphens.
 
 ## Unit tests
 
-Run the User service unit tests with:
+Run the User and Auth service unit tests with:
 
 ```sh
 pnpm exec nx test user
+pnpm exec nx test auth
 ```
 
-The tests use mocked Prisma and JWT services, so they do not require a running
-database. Add User service test files under `apps/services/user/src` with the
-`.spec.ts` suffix. To run with coverage, use
+The tests do not require a running database. Add service test files under
+`apps/services/<service>/src` with the `.spec.ts` suffix. To run with coverage,
+use `pnpm exec nx test auth --codeCoverage` or
 `pnpm exec nx test user --codeCoverage`.
 
 ## Service CLI
